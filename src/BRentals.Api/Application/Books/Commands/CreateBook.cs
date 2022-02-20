@@ -7,4 +7,5 @@ public record CreateBook(
     string Title, 
     string Category,
     string[] Authors,
-    DateTime Published) : ICommand;
+    DateTime Published,
+    int Copies) : ICommand;

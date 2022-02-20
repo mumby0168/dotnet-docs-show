@@ -11,12 +11,15 @@ public class Book : FullItem
     public string Category { get; }
     public DateOnly Published { get; }
 
+    public int Copies { get; }
+
     public Book(
         string id, 
         string title, 
         string[] authors,
         string category,
-        DateOnly published)
+        DateOnly published, 
+        int copies)
     {
         if (!id.IsValidIsbn())
         {
@@ -43,6 +46,7 @@ public class Book : FullItem
         Authors = authors;
         Category = category;
         Published = published;
+        Copies = copies;
         PartitionKey = category;
     }
     

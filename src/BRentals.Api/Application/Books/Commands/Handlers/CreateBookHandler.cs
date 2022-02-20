@@ -20,7 +20,7 @@ public class CreateBookHandler : ICommandHandler<CreateBook>
 
     public async Task HandleAsync(CreateBook command, CancellationToken cancellationToken)
     {
-        var (isbn, title, category, authors, published) = command;
+        var (isbn, title, category, authors, published, copies) = command;
 
         if (!await _bookCategoryRepository.ExistsAsync(category, nameof(BookCategory), cancellationToken))
         {
@@ -32,7 +32,8 @@ public class CreateBookHandler : ICommandHandler<CreateBook>
             title,
             authors,
             category,
-            DateOnly.FromDateTime(published));
+            DateOnly.FromDateTime(published),
+            copies);
 
         await _bookRepository.CreateAsync(book, cancellationToken);
     }

@@ -18,18 +18,22 @@ public class BookChangeFeedProcessor : IItemChangeFeedProcessor<Book>
         _bookScanLookupRepository = bookScanLookupRepository;
     }
 
-    public async ValueTask HandleAsync(Book item, CancellationToken cancellationToken)
+    public async ValueTask HandleAsync(Book book, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Updating book scan lookup record for book with id {BookID} in category {CategoryID}",
-            item.Id,
-            item.Category);
+            book.Id,
+            book.Category);
 
-        var scanLookup = new BookScanLookup(item.Id, item.Category);
+        var scanLookup = new BookScanLookup(
+            book.Id, 
+            book.Category, 
+            book.Copies);
+        
         await _bookScanLookupRepository.UpdateAsync(scanLookup, cancellationToken);
 
         _logger.LogInformation(
             "Successfully updated book scan lookup record for book with id {BookID} in category {CategoryID}",
-            item.Id,
-            item.Category);
+            book.Id,
+            book.Category);
     }
 }
