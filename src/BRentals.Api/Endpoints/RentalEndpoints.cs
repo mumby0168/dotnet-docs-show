@@ -13,6 +13,11 @@ public static class RentalEndpoints
             .WithTags(Tag)
             .Produces<ErrorDto>(400)
             .Produces<ErrorDto>(404);
+
+        builder.MapPut("/api/rentals/return", CQRSHelpers.HandleCommand<ReturnBook>())
+            .WithTags(Tag)
+            .Produces<ErrorDto>(400)
+            .Produces<ErrorDto>(404);
         
         return builder;
     }

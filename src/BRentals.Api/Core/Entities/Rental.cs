@@ -1,3 +1,4 @@
+using CleanArchitecture.Exceptions;
 using Microsoft.Azure.CosmosRepository;
 
 namespace BRentals.Api.Core.Entities;
@@ -7,7 +8,7 @@ public class Rental : FullItem
     public RentedBook Book { get; }
     public string CustomerUsername { get; }
     public DateTime RentedAt { get; }
-    public DateTime? ReturnedAt { get; }
+    public DateTime? ReturnedAt { get; private set; }
 
     public Rental(
         string partitionKey,
@@ -29,4 +30,14 @@ public class Rental : FullItem
         PartitionKey;
     
     public record RentedBook(string Isbn, string Title);
+
+    public void MarkReturned()
+    {
+        if (ReturnedAt is not null)
+        {
+            throw new DomainException<BookRental>($"The book rental with ID {Id} has already been returned on {ReturnedAt}");
+        }
+        
+        ReturnedAt = DateTime.UtcNow;
+    }
 }
