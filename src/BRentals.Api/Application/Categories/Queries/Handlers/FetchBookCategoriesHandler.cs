@@ -8,22 +8,18 @@ namespace BRentals.Api.Application.Categories.Queries.Handlers;
 
 public class FetchBookCategoriesHandler : IQueryHandler<FetchBookCategories, IEnumerable<BookCategoryDto>>
 {
-    private readonly ILogger<FetchBookCategoriesHandler> _logger;
     private readonly IRepository<BookCategory> _bookCategoryRepository;
 
-    public FetchBookCategoriesHandler(
-        ILogger<FetchBookCategoriesHandler> logger,
-        IRepository<BookCategory> bookCategoryRepository)
+    public FetchBookCategoriesHandler(IRepository<BookCategory> bookCategoryRepository)
     {
-        _logger = logger;
         _bookCategoryRepository = bookCategoryRepository;
     }
     
-    public async Task<IEnumerable<BookCategoryDto>> HandleAsync(FetchBookCategories query, CancellationToken cancellationToken = new CancellationToken())
+    public async Task<IEnumerable<BookCategoryDto>> HandleAsync(FetchBookCategories query, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Fetching book categories");
-
-        var specification = new Specification(query.Results, query.Ordered);
+        var (results, ordered) = query;
+        
+        var specification = new Specification(results, ordered);
 
         var result = await _bookCategoryRepository.QueryAsync(specification, cancellationToken);
 

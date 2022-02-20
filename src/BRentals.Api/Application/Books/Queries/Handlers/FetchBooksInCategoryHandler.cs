@@ -1,24 +1,50 @@
 using BRentals.Api.Application.Books.DTOs;
-using BRentals.Api.Application.Categories.DTOs;
-using BRentals.Api.Application.Categories.Queries;
-using BRentals.Api.Application.Categories.Queries.Handlers;
 using BRentals.Api.Core.Entities;
 using Convey.CQRS.Queries;
+using Microsoft.Azure.CosmosRepository;
 using Microsoft.Azure.CosmosRepository.Specification;
 
 namespace BRentals.Api.Application.Books.Queries.Handlers;
 
-public class FetchBooksInCategoryHandler : IQueryHandler<FetchBooksInCategory, IEnumerable<BookDto>>
+public class FetchBooksInCategoryHandler : IQueryHandler<FetchBooksInCategory, FetchBooksInCategory.QueryResult>
 {
-    private readonly ILogger<FetchBooksInCategoryHandler> _logger;
+    private readonly IRepository<Book> _repository;
 
-    public FetchBooksInCategoryHandler(ILogger<FetchBooksInCategoryHandler> logger)
+    public FetchBooksInCategoryHandler(IRepository<Book> repository) => 
+        _repository = repository;
+
+    public async Task<FetchBooksInCategory.QueryResult> HandleAsync(
+        FetchBooksInCategory query,
+        CancellationToken cancellationToken)
     {
-        _logger = logger;
+        var (category, pageSize, continuationToken) = query;
+
+        var specification = new Specification(category, pageSize, continuationToken);
+
+        var result = await _repository.QueryAsync(specification, cancellationToken);
+
+        var bookDtos = result.Items.Select(x =>
+            new BookDto(
+                x.Id,
+                x.Title,
+                x.Category,
+                x.Authors,
+                x.Published.ToShortDateString()));
+
+        return new FetchBooksInCategory.QueryResult(bookDtos, result.Continuation);
     }
 
-    public Task<IEnumerable<BookDto>> HandleAsync(FetchBooksInCategory query, CancellationToken cancellationToken)
+    private class Specification : ContinuationTokenSpecification<Book>
     {
-        throw new NotImplementedException();
+        public Specification(
+            string category,
+            int pageSize,
+            string? continuationToken = null)
+        {
+            Query
+                .Where(x => x.PartitionKey == category)
+                .PageSize(pageSize)
+                .ContinuationToken(continuationToken);
+        }
     }
 }

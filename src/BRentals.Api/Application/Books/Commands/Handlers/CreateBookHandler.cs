@@ -7,16 +7,13 @@ namespace BRentals.Api.Application.Books.Commands.Handlers;
 
 public class CreateBookHandler : ICommandHandler<CreateBook>
 {
-    private readonly ILogger<CreateBookHandler> _logger;
     private readonly IRepository<Book> _bookRepository;
     private readonly IRepository<BookCategory> _bookCategoryRepository;
 
     public CreateBookHandler(
-        ILogger<CreateBookHandler> logger,
         IRepository<Book> bookRepository,
         IRepository<BookCategory> bookCategoryRepository)
     {
-        _logger = logger;
         _bookRepository = bookRepository;
         _bookCategoryRepository = bookCategoryRepository;
     }
@@ -24,8 +21,6 @@ public class CreateBookHandler : ICommandHandler<CreateBook>
     public async Task HandleAsync(CreateBook command, CancellationToken cancellationToken)
     {
         var (isbn, title, category, authors, published) = command;
-        
-        _logger.LogInformation("Handling create book {BookIsbn} in category {BookCategory}", isbn, category);
 
         if (!await _bookCategoryRepository.ExistsAsync(category, nameof(BookCategory), cancellationToken))
         {
@@ -40,7 +35,5 @@ public class CreateBookHandler : ICommandHandler<CreateBook>
             DateOnly.FromDateTime(published));
 
         await _bookRepository.CreateAsync(book, cancellationToken);
-
-        _logger.LogInformation("Created book {BookIsbn} in category {BookCategory}", isbn, category);
     }
 }
