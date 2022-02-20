@@ -1,4 +1,3 @@
-using System.Net;
 using BRentals.Api.Application.Categories.Commands;
 using BRentals.Api.Application.Categories.DTOs;
 using BRentals.Api.Application.Categories.Queries;
