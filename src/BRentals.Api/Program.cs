@@ -25,7 +25,9 @@ app.UseCleanArchitectureExceptionsHandler();
 app.MapGet("/", () => Results.Redirect("/swagger"))
     .ExcludeFromDescription();
 
-app.MapBookCategoryEndpoints();
-app.MapBookEndpoints();
+app
+    .MapBookCategoryEndpoints()
+    .MapBookEndpoints()
+    .MapRentalEndpoints();
 
 app.Run();

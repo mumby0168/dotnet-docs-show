@@ -1,6 +1,8 @@
 using BRentals.Api.Core.Entities;
+using BRentals.Api.Core.Repositories;
 using BRentals.Api.Infrastructure.Constants;
 using BRentals.Api.Infrastructure.Models;
+using BRentals.Api.Infrastructure.Repositories;
 using Microsoft.Azure.CosmosRepository.AspNetCore.Extensions;
 
 namespace BRentals.Api.Infrastructure.Extensions;
@@ -24,15 +26,17 @@ public static class ServiceCollectionExtensions
                 : DatabaseId;
 
             var containerBuilder = options.ContainerBuilder;
-
-            //Configures the container in which BookCategory items will be stored
+            
+            // Configures all the entities and there containers.
+            // Look out for the .WithChangeFeedMonitoring()
+            // This tells the library to process changes from that container.
+            
             containerBuilder.Configure<BookCategory>(containerOptions => 
                 containerOptions
                     .WithContainer(Containers.Books)
                     .WithPartitionKey(PartitionKeys.Default)
                     .WithServerlessThroughput());
             
-            //Configures the container in which Book items will be stored
             containerBuilder.Configure<Book>(containerOptions => 
                 containerOptions
                     .WithContainer(Containers.Books)
@@ -40,11 +44,23 @@ public static class ServiceCollectionExtensions
                     .WithServerlessThroughput()
                     .WithChangeFeedMonitoring());
             
-            //Configures the container in which BookScanLookup items will be stored
             containerBuilder.Configure<BookScanLookup>(containerOptions => 
                 containerOptions
                     .WithContainer(Containers.Lookups)
                     .WithPartitionKey(PartitionKeys.Lookups)
+                    .WithServerlessThroughput());
+            
+            containerBuilder.Configure<BookRental>(containerOptions => 
+                containerOptions
+                    .WithContainer(Containers.BookRentals)
+                    .WithPartitionKey(PartitionKeys.Default)
+                    .WithServerlessThroughput()
+                    .WithChangeFeedMonitoring());
+            
+            containerBuilder.Configure<CustomerRental>(containerOptions => 
+                containerOptions
+                    .WithContainer(Containers.CustomerRentals)
+                    .WithPartitionKey(PartitionKeys.Default)
                     .WithServerlessThroughput());
         });
 
@@ -53,6 +69,9 @@ public static class ServiceCollectionExtensions
         
         // Starts a ASPNET CORE hosted service to listen to the change feed
         services.AddCosmosRepositoryChangeFeedHostedService();
+
+        //Adds the book rental manager repository which combines multiple IRepository<T>'s
+        services.AddSingleton<IBookRentalManagerRepository, BookRentalManagerRepository>();
 
         return services;
     }

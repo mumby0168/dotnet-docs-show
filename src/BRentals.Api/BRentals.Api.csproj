@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <Folder Include="Application\Categories" />
-    <Folder Include="Core\Repositories" />
   </ItemGroup>
 
 </Project>
