@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>af6a050e-d280-4f84-aa92-186d6117d412</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,12 +13,13 @@
     <PackageReference Include="Convey.CQRS.Queries" Version="1.0.531" />
     <PackageReference Include="IEvangelist.Azure.CosmosRepository" Version="2.12.1" />
     <PackageReference Include="IEvangelist.Azure.CosmosRepository.AspNetCore" Version="2.12.1" />
+    <PackageReference Include="Mumby0168.CleanArchitecture.Exceptions.AspNetCore" Version="1.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application" />
+    <Folder Include="Application\Categories" />
     <Folder Include="Core\Repositories" />
-    <Folder Include="Infrastructure" />
   </ItemGroup>
 
 </Project>
