@@ -23,7 +23,12 @@ public static class RentalEndpoints
             .Produces<ErrorDto>(400)
             .Produces<ErrorDto>(404);
         
-        builder.MapGet("/api/rentals", GetInCategory)
+        builder.MapGet("/api/rentals/customers", FetchForUsername)
+            .WithTags(Tag)
+            .Produces<ErrorDto>(400)
+            .Produces<ErrorDto>(404);
+        
+        builder.MapGet("/api/rentals/books", FetchForBook)
             .WithTags(Tag)
             .Produces<ErrorDto>(400)
             .Produces<ErrorDto>(404);
@@ -31,7 +36,7 @@ public static class RentalEndpoints
         return builder;
     }
 
-    private static async Task<IEnumerable<RentalDto>> GetInCategory(
+    private static async Task<IEnumerable<RentalDto>> FetchForUsername(
         IQueryDispatcher dispatcher,
         HttpContext httpContext,
         [FromQuery] string username,
@@ -41,6 +46,29 @@ public static class RentalEndpoints
     {
         var query = new FetchRentalsForUsername(
             username,
+            pageSize,
+            continuationToken);
+
+        var (rentalDtos, token) = await dispatcher.QueryAsync(query);
+
+        if (token is not null)
+        {
+            httpContext.Response.Headers.Add(ApiConstants.ContinuationHeader, token);
+        }
+
+        return rentalDtos;
+    }
+    
+    private static async Task<IEnumerable<RentalDto>> FetchForBook(
+        IQueryDispatcher dispatcher,
+        HttpContext httpContext,
+        [FromQuery] string isbn,
+        [FromQuery] int pageSize = 25,
+        [FromHeader(Name = ApiConstants.ContinuationHeader)]
+        string? continuationToken = null)
+    {
+        var query = new FetchRentalsForBook(
+            isbn,
             pageSize,
             continuationToken);
 

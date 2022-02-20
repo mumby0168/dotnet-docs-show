@@ -6,22 +6,21 @@ using Microsoft.Azure.CosmosRepository.Specification;
 
 namespace BRentals.Api.Application.Rentals.Queries.Handlers;
 
-public class
-    FetchRentalsForUsernameHandler : IQueryHandler<FetchRentalsForUsername, FetchRentalsForUsername.QueryResult>
+public class FetchRentalsForBookHandler : IQueryHandler<FetchRentalsForBook, FetchRentalsForBook.QueryResult>
 {
-    private readonly IRepository<CustomerRental> _repository;
+    private readonly IRepository<BookRental> _repository;
 
-    public FetchRentalsForUsernameHandler(IRepository<CustomerRental> repository) =>
+    public FetchRentalsForBookHandler(IRepository<BookRental> repository) =>
         _repository = repository;
 
-    public async Task<FetchRentalsForUsername.QueryResult> HandleAsync(
-        FetchRentalsForUsername query,
+    public async Task<FetchRentalsForBook.QueryResult> HandleAsync(
+        FetchRentalsForBook query,
         CancellationToken cancellationToken)
     {
-        var (username, results, continuation) = query;
+        var (isbn, results, continuation) = query;
 
         var specification = new Specification(
-            username,
+            isbn,
             results,
             continuation);
 
@@ -29,7 +28,7 @@ public class
             specification,
             cancellationToken);
 
-        return new FetchRentalsForUsername.QueryResult(
+        return new FetchRentalsForBook.QueryResult(
             queryResult.Items.Select(x =>
                 new RentalDto(
                     x.Id,
@@ -41,15 +40,15 @@ public class
             queryResult.Continuation);
     }
 
-    private class Specification : ContinuationTokenSpecification<CustomerRental>
+    private class Specification : ContinuationTokenSpecification<BookRental>
     {
         public Specification(
-            string username,
+            string isbn,
             int pageSize,
             string? continuationToken = null)
         {
             Query
-                .Where(x => x.PartitionKey == username)
+                .Where(x => x.PartitionKey == isbn)
                 .OrderByDescending(x => x.RentedAt)
                 .PageSize(pageSize)
                 .ContinuationToken(continuationToken);

@@ -3,10 +3,10 @@ using Convey.CQRS.Queries;
 
 namespace BRentals.Api.Application.Rentals.Queries;
 
-public record FetchRentalsForUsername(
-    string Username,
+public record FetchRentalsForBook(
+    string Isbn,
     int Results,
-    string? Continuation) : IQuery<FetchRentalsForUsername.QueryResult>
+    string? Continuation) : IQuery<FetchRentalsForBook.QueryResult>
 {
     public record QueryResult(IEnumerable<RentalDto> Rentals, string? ContinuationToken);
 }
