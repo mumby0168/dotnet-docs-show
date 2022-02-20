@@ -1,5 +1,5 @@
-using BRentals.Api.Application.Categories.DTOs;
 using BRentals.Api.Core.Entities;
+using BRentals.DTOs;
 using Convey.CQRS.Queries;
 using Microsoft.Azure.CosmosRepository;
 using Microsoft.Azure.CosmosRepository.Specification;

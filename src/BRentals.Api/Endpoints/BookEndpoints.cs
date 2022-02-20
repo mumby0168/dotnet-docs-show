@@ -1,6 +1,6 @@
 using BRentals.Api.Application.Books.Commands;
-using BRentals.Api.Application.Books.DTOs;
 using BRentals.Api.Application.Books.Queries;
+using BRentals.DTOs;
 using CleanArchitecture.Exceptions.AspNetCore;
 using Convey.CQRS.Queries;
 using Microsoft.AspNetCore.Mvc;

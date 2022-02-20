@@ -1,4 +1,4 @@
-using BRentals.Api.Application.Categories.DTOs;
+using BRentals.DTOs;
 using Convey.CQRS.Queries;
 
 namespace BRentals.Api.Application.Categories.Queries;

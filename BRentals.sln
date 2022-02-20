@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRentals.Api", "src\BRental
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRentals.Hub", "src\BRentals.Hub\BRentals.Hub.csproj", "{512CD6CF-F4C4-4346-8E52-A989A0E93762}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRentals.DTOs", "src\BRentals.DTOs\BRentals.DTOs.csproj", "{6B127DD1-6BD7-4A2D-B671-DC1AEDF171DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,9 +28,14 @@ Global
 		{512CD6CF-F4C4-4346-8E52-A989A0E93762}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{512CD6CF-F4C4-4346-8E52-A989A0E93762}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{512CD6CF-F4C4-4346-8E52-A989A0E93762}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B127DD1-6BD7-4A2D-B671-DC1AEDF171DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B127DD1-6BD7-4A2D-B671-DC1AEDF171DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B127DD1-6BD7-4A2D-B671-DC1AEDF171DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B127DD1-6BD7-4A2D-B671-DC1AEDF171DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{70B4CCB4-8AD1-4F95-9D92-9D8A9EB545E0} = {F6591320-72C2-4773-A29F-C5D8A7E55FF1}
 		{512CD6CF-F4C4-4346-8E52-A989A0E93762} = {F6591320-72C2-4773-A29F-C5D8A7E55FF1}
+		{6B127DD1-6BD7-4A2D-B671-DC1AEDF171DB} = {F6591320-72C2-4773-A29F-C5D8A7E55FF1}
 	EndGlobalSection
 EndGlobal

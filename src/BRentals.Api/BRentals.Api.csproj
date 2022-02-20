@@ -19,6 +19,11 @@
 
   <ItemGroup>
     <Folder Include="Application\Categories" />
+    <Folder Include="Application\Categories\DTOs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BRentals.DTOs\BRentals.DTOs.csproj" />
   </ItemGroup>
 
 </Project>

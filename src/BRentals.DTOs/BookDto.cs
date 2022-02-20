@@ -1,4 +1,4 @@
-namespace BRentals.Api.Application.Books.DTOs;
+namespace BRentals.DTOs;
 
 public record BookDto(
     string Id,
