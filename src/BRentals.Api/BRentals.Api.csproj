@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Convey" Version="1.0.531" />
+    <PackageReference Include="Convey.CQRS.Commands" Version="1.0.531" />
+    <PackageReference Include="Convey.CQRS.Queries" Version="1.0.531" />
+    <PackageReference Include="IEvangelist.Azure.CosmosRepository" Version="2.12.1" />
+    <PackageReference Include="IEvangelist.Azure.CosmosRepository.AspNetCore" Version="2.12.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Application" />
+    <Folder Include="Core\Repositories" />
+    <Folder Include="Infrastructure" />
+  </ItemGroup>
+
+</Project>

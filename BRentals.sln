@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F6591320-72C2-4773-A29F-C5D8A7E55FF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRentals.Api", "src\BRentals.Api\BRentals.Api.csproj", "{70B4CCB4-8AD1-4F95-9D92-9D8A9EB545E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRentals.Hub", "src\BRentals.Hub\BRentals.Hub.csproj", "{512CD6CF-F4C4-4346-8E52-A989A0E93762}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{70B4CCB4-8AD1-4F95-9D92-9D8A9EB545E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70B4CCB4-8AD1-4F95-9D92-9D8A9EB545E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70B4CCB4-8AD1-4F95-9D92-9D8A9EB545E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70B4CCB4-8AD1-4F95-9D92-9D8A9EB545E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{512CD6CF-F4C4-4346-8E52-A989A0E93762}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{512CD6CF-F4C4-4346-8E52-A989A0E93762}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{512CD6CF-F4C4-4346-8E52-A989A0E93762}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{512CD6CF-F4C4-4346-8E52-A989A0E93762}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{70B4CCB4-8AD1-4F95-9D92-9D8A9EB545E0} = {F6591320-72C2-4773-A29F-C5D8A7E55FF1}
+		{512CD6CF-F4C4-4346-8E52-A989A0E93762} = {F6591320-72C2-4773-A29F-C5D8A7E55FF1}
+	EndGlobalSection
+EndGlobal
