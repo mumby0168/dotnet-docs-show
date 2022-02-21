@@ -1,13 +1,56 @@
 @page "/categories/{category}/books/{bookId}"
 
-<h3>@BookId</h3>
+@if (Book is not null)
+{
+    <section class="hero">
+        <div class="hero-body">
+            <p class="title">
+                <i class="fas fa-bookmark mr-1"></i>
+                @Book.Title
+            </p>
+            
+            <span class="dropdown-divider"></span>
+            
+            <p class="subtitle">
+                Written by @AuthorsList(Book.Authors)
+            </p>
+            <p class="subtitle">
+                Published on @Book.Published
+            </p>
+
+            <button class="button is-primary is-outlined">
+                <i class="fas fa-dollar-sign mr-1"></i>
+                Rent
+            </button>
+
+            <button class="button is-link is-light">
+                <i class="fas fa-arrow-right mr-1"></i>
+                Return
+            </button>
+        </div>
+    </section>
+}
 
 @code {
 
     [Parameter]
     public string BookId { get; set; } = null!;
-    
+
     [Parameter]
     public string Category { get; set; } = null!;
+
+    [Inject]
+    public IBRentalsApiClient Client { get; set; } = null!;
+
+    private BookDto? Book { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Book = await Client.GetBook(BookId, Category);
+        await base.OnInitializedAsync();
+    }
+
+    private static string AuthorsList(string[] authors) =>
+        string.Join(", ", authors);
 
 }

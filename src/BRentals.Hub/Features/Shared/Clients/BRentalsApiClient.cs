@@ -1,3 +1,4 @@
+using System.Text;
 using BRentals.DTOs;
 using BRentals.Hub.Features.Shared.Extensions;
 
@@ -8,40 +9,67 @@ public class BRentalsApiClient : IBRentalsApiClient
     private readonly HttpClient _client;
     private const string ContinuationHeader = "X-Continuation";
 
-    public BRentalsApiClient(HttpClient client) => 
+    public BRentalsApiClient(HttpClient client) =>
         _client = client;
 
-    public async ValueTask<PagedApiResult<BookCategoryDto>> GetBookCategoriesAsync(string? continuation = null, int pageSize = 25)
+    public async ValueTask<PagedApiResult<BookCategoryDto>> GetBookCategoriesAsync(
+        string? continuation = null,
+        int pageSize = 25)
     {
         _client.TrySetHeader(ContinuationHeader, continuation);
-        
+
         var response = await _client.GetAsync($"categories?pageSize={pageSize}");
 
         if (response.IsSuccessStatusCode)
         {
             return new PagedApiResult<BookCategoryDto>(
                 true,
-                await response.Content.ReadFromJsonAsync<List<BookCategoryDto>>() ?? new List<BookCategoryDto>(), 
+                await response.Content.ReadFromJsonAsync<List<BookCategoryDto>>() ?? new List<BookCategoryDto>(),
                 response.TryGetHeader(ContinuationHeader));
         }
 
         return new PagedApiResult<BookCategoryDto>(false, new List<BookCategoryDto>());
     }
 
-    public async ValueTask<PagedApiResult<BookDto>> GetBooksInCategoryAsync(string category, string? continuation = null, int pageSize = 25)
+    public async ValueTask<PagedApiResult<BookDto>> GetBooksInCategoryAsync(
+        string category,
+        string? continuation = null, 
+        int pageSize = 25)
     {
         _client.TrySetHeader(ContinuationHeader, continuation);
-        
+
         var response = await _client.GetAsync($"books?category={category}&pageSize={pageSize}");
 
         if (response.IsSuccessStatusCode)
         {
             return new PagedApiResult<BookDto>(
                 true,
-                await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? new List<BookDto>(), 
+                await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? new List<BookDto>(),
                 response.TryGetHeader(ContinuationHeader));
         }
 
         return new PagedApiResult<BookDto>(false, new List<BookDto>());
+    }
+
+    public async ValueTask<BookDto?> GetBook(
+        string isbn, 
+        string? category)
+    {
+        var url = new StringBuilder()
+            .Append($"books/{isbn}");
+
+        if (category is not null)
+        {
+            url.Append($"?category={category}");
+        }
+
+        var response = await _client.GetAsync(url.ToString());
+
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadFromJsonAsync<BookDto>();
+        }
+
+        return null;
     }
 }

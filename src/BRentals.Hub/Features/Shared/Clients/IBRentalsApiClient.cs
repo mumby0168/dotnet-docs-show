@@ -12,4 +12,8 @@ public interface IBRentalsApiClient
         string category,
         string? continuation = null,
         int pageSize = 25);
+
+    ValueTask<BookDto?> GetBook(
+        string isbn,
+        string? category);
 }
