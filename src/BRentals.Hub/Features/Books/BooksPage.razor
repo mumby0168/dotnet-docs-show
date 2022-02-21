@@ -17,8 +17,10 @@
     <table class="table is-fullwidth">
         <thead>
         <tr>
-            <th>ISBN</th>
             <th>Title</th>
+            <th>Authors</th>
+            <th>Published</th>
+            <th>Metadata</th>
         </tr>
         </thead>
         <tbody>
@@ -26,10 +28,20 @@
         {
             <tr>
                 <td>
-
-                    @book.Id
+                    @book.Title
                 </td>
-                <td>@book.Title</td>
+                <td>
+                    @AuthorsList(@book.Authors)
+                </td>
+                <td>
+                    @book.Published
+                </td>
+                <td>
+                    <div class="tags">
+                        <span class="tag is-dark">@book.Id</span>
+                        <span class="tag is-link">@book.Category</span>
+                    </div>
+                </td>
             </tr>
         }
         </tbody>
@@ -61,5 +73,8 @@
 
         await base.OnInitializedAsync();
     }
+
+    private static string AuthorsList(string[] authors) =>
+        string.Join(",", authors);
 
 }
