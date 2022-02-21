@@ -15,11 +15,18 @@ public static class BookEndpoints
     {
         builder.MapPost("/api/books", CQRSHelpers.HandleCommand<CreateBook>())
             .WithTags(Tag)
-            .Produces<ErrorDto>(400);
+            .Produces<ErrorDto>(400)
+            .Produces(200);
 
         builder.MapGet("/api/books", GetInCategory)
             .WithTags(Tag)
-            .Produces<ErrorDto>(400);
+            .Produces<ErrorDto>(400)
+            .Produces<IEnumerable<BookDto>>();
+
+        builder.MapGet("/api/books/{isbn}", GetBook)
+            .WithTags(Tag)
+            .Produces(404)
+            .Produces<BookDto>();
 
         return builder;
     }
@@ -45,5 +52,19 @@ public static class BookEndpoints
         }
 
         return bookDtos;
+    }
+
+    private static async Task<IResult> GetBook(
+        IQueryDispatcher dispatcher,
+        [FromRoute] string isbn,
+        [FromQuery] string? category = null)
+    {
+        var query = new FetchBook(
+            isbn, 
+            category);
+        
+        var book = await dispatcher.QueryAsync(query);
+
+        return book is null ? Results.NotFound() : Results.Ok(book);
     }
 }
