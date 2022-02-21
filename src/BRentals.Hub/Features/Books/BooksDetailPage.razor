@@ -1,0 +1,13 @@
+@page "/categories/{category}/books/{bookId}"
+
+<h3>@BookId</h3>
+
+@code {
+
+    [Parameter]
+    public string BookId { get; set; } = null!;
+    
+    [Parameter]
+    public string Category { get; set; } = null!;
+
+}

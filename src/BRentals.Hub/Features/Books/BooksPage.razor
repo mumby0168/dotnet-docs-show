@@ -1,6 +1,4 @@
 @page "/categories/{category}/books"
-@using BRentals.Hub.Features.Shared.Clients
-@using BRentals.DTOs
 
 <section class="hero">
     <div class="hero-body">
@@ -28,7 +26,9 @@
         {
             <tr>
                 <td>
-                    @book.Title
+                    <NavLink href="@NavigateToBook(book.Id)">
+                        @book.Title
+                    </NavLink>
                 </td>
                 <td>
                     @AuthorsList(@book.Authors)
@@ -76,5 +76,8 @@
 
     private static string AuthorsList(string[] authors) =>
         string.Join(",", authors);
+
+    private string NavigateToBook(string bookId) =>
+        $"categories/{Category}/books/{bookId}";
 
 }
