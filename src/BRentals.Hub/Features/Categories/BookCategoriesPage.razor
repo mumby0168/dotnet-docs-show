@@ -1,0 +1,53 @@
+@page "/categories"
+@using BRentals.DTOs
+
+<section class="hero">
+  <div class="hero-body">
+    <p class="title">
+      Book Categories
+    </p>
+    <p class="subtitle">
+      View all your favourite book categories
+    </p>
+  </div>
+</section>
+
+<section class="section pt-0">
+    <table class="table is-fullwidth">
+        <thead>
+        <tr>
+            <th>Category</th>
+            <th>
+                Actions
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var category in Categories)
+        {
+            <tr>
+                <td>@category.Name</td>
+                <td>
+                    <NavLink class="button is-small is-outlined">
+                        <i class="fas fa-book-open mr-1"></i> 
+                        <span>Books</span>
+                    </NavLink>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</section>
+
+@code {
+
+    private List<BookCategoryDto> Categories { get; set; } = new()
+    {
+        new BookCategoryDto("Tech"),
+        new BookCategoryDto("Fiction"),
+        new BookCategoryDto("Non-Fiction"),
+        new BookCategoryDto("Maths"),
+        new BookCategoryDto("Science"),
+    };
+
+}
