@@ -2,14 +2,14 @@
 @using BRentals.DTOs
 
 <section class="hero">
-  <div class="hero-body">
-    <p class="title">
-      Book Categories
-    </p>
-    <p class="subtitle">
-      View all your favourite book categories
-    </p>
-  </div>
+    <div class="hero-body">
+        <p class="title">
+            Book Categories
+        </p>
+        <p class="subtitle">
+            View all your favourite book categories
+        </p>
+    </div>
 </section>
 
 <section class="section pt-0">
@@ -17,22 +17,19 @@
         <thead>
         <tr>
             <th>Category</th>
-            <th>
-                Actions
-            </th>
+            <th>Total Books</th>
         </tr>
         </thead>
         <tbody>
         @foreach (var category in Categories)
         {
             <tr>
-                <td>@category.Name</td>
                 <td>
-                    <NavLink class="button is-small is-outlined">
-                        <i class="fas fa-book-open mr-1"></i> 
-                        <span>Books</span>
+                    <NavLink href="@BooksPageUrl(category.Name)">
+                        @category.Name
                     </NavLink>
                 </td>
+                <td>@category.BooksCount</td>
             </tr>
         }
         </tbody>
@@ -43,11 +40,14 @@
 
     private List<BookCategoryDto> Categories { get; set; } = new()
     {
-        new BookCategoryDto("Tech"),
-        new BookCategoryDto("Fiction"),
-        new BookCategoryDto("Non-Fiction"),
-        new BookCategoryDto("Maths"),
-        new BookCategoryDto("Science"),
+        new BookCategoryDto("Tech", 10),
+        new BookCategoryDto("Fiction", 20),
+        new BookCategoryDto("Non-Fiction", 50),
+        new BookCategoryDto("Maths", 5),
+        new BookCategoryDto("Science", 10),
     };
+
+    private string BooksPageUrl(string category) =>
+        $"categories/{category}/books";
 
 }

@@ -1,0 +1,19 @@
+@page "/categories/{category}/books"
+
+<section class="hero">
+    <div class="hero-body">
+        <p class="title">
+            @Category
+        </p>
+        <p class="subtitle">
+            See all the books in the @Category category
+        </p>
+    </div>
+</section>
+
+@code {
+
+    [Parameter]
+    public string Category { get; set; } = null!;
+
+}
