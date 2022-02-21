@@ -1,0 +1,10 @@
+
+.brentals-brand {
+    background-color: rgba(0, 0, 0, .25);
+    width: 250px;
+    display: flex;
+}
+
+.brentals-brand .navbar-item img {
+    max-height: 22px;
+}

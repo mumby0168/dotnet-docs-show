@@ -1,0 +1,6 @@
+.sidebar-wrapper {
+    width: 250px;
+    background-color: rgba(0, 0, 0, .075);
+    position: sticky;
+    min-height: calc(100vh - 3.25rem);
+}

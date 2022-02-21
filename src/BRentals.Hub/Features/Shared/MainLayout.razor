@@ -1,0 +1,13 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>BRentals.Hub</PageTitle>
+
+<div>
+    <Navbar></Navbar>
+    <div style="display: flex; position: relative; flex-direction: row">
+        <Sidebar/>
+        <main style="flex: 1" class="container">
+            @Body
+        </main>
+    </div>
+</div>
