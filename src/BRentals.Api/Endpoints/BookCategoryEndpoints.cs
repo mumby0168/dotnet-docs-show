@@ -24,8 +24,8 @@ public static class BookCategoryEndpoints
     }
 
     private static Task<IEnumerable<BookCategoryDto>> GetAll(
-        [FromQuery] int? results,
+        [FromQuery] int? pageSize,
         [FromQuery] bool? ordered,
         IQueryDispatcher dispatcher) =>
-        dispatcher.QueryAsync(new FetchBookCategories(results ?? 20, ordered ?? true));
+        dispatcher.QueryAsync(new FetchBookCategories(pageSize ?? 20, ordered ?? true));
 }

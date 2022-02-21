@@ -1,14 +1,14 @@
-@page "/categories"
+@page "/categories/{category}/books"
 @using BRentals.Hub.Features.Shared.Clients
 @using BRentals.DTOs
 
 <section class="hero">
     <div class="hero-body">
         <p class="title">
-            Book Categories
+            @Category
         </p>
         <p class="subtitle">
-            View all your favourite book categories
+            See all the books in the @Category category
         </p>
     </div>
 </section>
@@ -17,20 +17,19 @@
     <table class="table is-fullwidth">
         <thead>
         <tr>
-            <th>Category</th>
-            <th>Total Books</th>
+            <th>ISBN</th>
+            <th>Title</th>
         </tr>
         </thead>
         <tbody>
-        @foreach (var category in Categories)
+        @foreach (var book in Books)
         {
             <tr>
                 <td>
-                    <NavLink href="@BooksPageUrl(category.Name)">
-                        @category.Name
-                    </NavLink>
+
+                    @book.Id
                 </td>
-                <td>@category.BooksCount</td>
+                <td>@book.Title</td>
             </tr>
         }
         </tbody>
@@ -39,28 +38,28 @@
 
 @code {
 
+    [Parameter]
+    public string Category { get; set; } = null!;
+
     [Inject]
     public IBRentalsApiClient Client { get; set; } = null!;
 
     private string? Continuation { get; set; }
 
-    private List<BookCategoryDto> Categories { get; set; } = new();
+    private List<BookDto> Books { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
-        var (isSuccessful, bookCategoryDtos, continuation) =
-            await Client.GetBookCategoriesAsync();
+        var (isSuccessful, books, continuation) =
+            await Client.GetBooksInCategoryAsync(Category);
 
         if (isSuccessful)
         {
-            Categories = bookCategoryDtos;
+            Books = books;
             Continuation = continuation;
         }
 
         await base.OnInitializedAsync();
     }
-
-    private string BooksPageUrl(string category) =>
-        $"categories/{category}/books";
 
 }

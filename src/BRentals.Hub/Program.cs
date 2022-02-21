@@ -1,7 +1,12 @@
+using BRentals.Hub.Features.Shared.Clients;
+
 var builder = WebApplication.CreateBuilder(args);
+
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddHttpClient<IBRentalsApiClient, BRentalsApiClient>(client =>
+    client.BaseAddress = builder.Configuration.GetValue<Uri>("ApiBaseUrl"));
 
 var app = builder.Build();
 

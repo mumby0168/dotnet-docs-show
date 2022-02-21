@@ -3,4 +3,4 @@ using Convey.CQRS.Queries;
 
 namespace BRentals.Api.Application.Categories.Queries;
 
-public record FetchBookCategories(int Results = 20, bool Ordered = true) : IQuery<IEnumerable<BookCategoryDto>>;
+public record FetchBookCategories(int PageSize = 20, bool Ordered = true) : IQuery<IEnumerable<BookCategoryDto>>;
