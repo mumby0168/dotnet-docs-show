@@ -1,0 +1,10 @@
+<h3>RentBookModal</h3>
+
+<button @onclick="() => ModalInstance.CloseAsync()">Close</button>
+
+@code {
+
+    [CascadingParameter]
+    BlazoredModalInstance ModalInstance { get; set; } = null!;
+
+}

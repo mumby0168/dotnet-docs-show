@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using Blazored.Toast.Configuration
+@inherits LayoutComponentBase
 
 <PageTitle>BRentals.Hub</PageTitle>
 
@@ -7,6 +8,12 @@
     <div style="display: flex; position: relative; flex-direction: row">
         <Sidebar/>
         <main style="flex: 1" class="container">
+            <BlazoredToasts Position="ToastPosition.BottomRight"
+                            Timeout="10"
+                            IconType="IconType.FontAwesome"
+                            SuccessClass="success-toast-override"
+                            SuccessIcon="fa fa-thumbs-up"
+                            ErrorIcon="fa fa-bug"/>
             @Body
         </main>
     </div>
