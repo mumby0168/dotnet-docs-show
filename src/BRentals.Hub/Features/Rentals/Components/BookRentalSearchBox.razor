@@ -1,0 +1,24 @@
+<h3 class="title">Book Rental Search</h3>
+<EditForm EditContext="EditContext">
+    <DataAnnotationsValidator/>
+
+    <div class="field mb-0 has-addons">
+        <p class="control is-expanded">
+            <input class="input is-medium" type="text" placeholder="ISBN: 123-321-123-5">
+        </p>
+        <p class="control">
+            <a class="is-medium button">
+                Search
+            </a>
+        </p>
+    </div>
+
+    <label class="checkbox">
+        <input type="checkbox">
+        Include past rentals
+    </label>
+</EditForm>
+
+@code {
+    private EditContext EditContext { get; set; } = new(new object());
+}
