@@ -1,8 +1,8 @@
 <div class="modal is-active">
     <div class="modal-background"></div>
     <div class="modal-content">
-
         <div class="modal-card">
+            
             <header class="modal-card-head">
                 <p class="modal-card-title">
                     <i class="fas fa-dollar-sign mr-1"></i>
@@ -10,10 +10,10 @@
                 </p>
                 <button @onclick="() => ModalInstance.CloseAsync()" class="delete" aria-label="close"></button>
             </header>
+
             <EditForm EditContext="EditContext" OnValidSubmit="Rent">
                 <DataAnnotationsValidator/>
                 <section class="modal-card-body">
-
 
                     <div class="field">
                         <label class="label">Username</label>
@@ -29,14 +29,14 @@
                         <div class="content">
                             <p>Renting @Book.Title for @ViewModel.Username</p>
                             <progress class="progress is-small is-primary" max="100">15%</progress>
-                        </div>    
+                        </div>
                     }
-                    
+
                     @if (ErrorMessage is not null)
                     {
                         <div class="content has-text-danger">
                             @ErrorMessage
-                        </div>    
+                        </div>
                     }
 
                 </section>
@@ -45,10 +45,10 @@
                     <button type="submit" class="button is-success">Submit</button>
                     <button @onclick="() => ModalInstance.CloseAsync()" class="button is-danger is-outlined" aria-label="close">Cancel</button>
                 </footer>
+                
             </EditForm>
+            
         </div>
-
-
     </div>
 </div>
 
@@ -63,7 +63,7 @@
 
     [Inject]
     public IBRentalsApiClient Client { get; set; } = null!;
-    
+
     [Inject]
     public IToastService ToastService { get; set; } = null!;
 
@@ -78,7 +78,7 @@
     }
 
     private bool IsLoading { get; set; }
-    
+
     private string? ErrorMessage { get; set; }
 
     private async Task Rent()
@@ -86,7 +86,7 @@
         IsLoading = true;
         ErrorMessage = await Client.RentBook(Book.Id, ViewModel.Username);
         IsLoading = false;
-        
+
         if (ErrorMessage is not null)
         {
             await ModalInstance.CloseAsync();
