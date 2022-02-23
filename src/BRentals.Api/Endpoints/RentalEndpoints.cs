@@ -13,7 +13,7 @@ public static class RentalEndpoints
 
     public static IEndpointRouteBuilder MapRentalEndpoints(this IEndpointRouteBuilder builder)
     {
-        builder.MapPost("/api/rentals/", CQRSHelpers.HandleCommand<RentBook>())
+        builder.MapPost("/api/rentals", CQRSHelpers.HandleCommand<RentBook>())
             .WithTags(Tag)
             .Produces<ErrorDto>(400)
             .Produces<ErrorDto>(404);

@@ -1,10 +1,97 @@
-<h3>RentBookModal</h3>
+<div class="modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-content">
 
-<button @onclick="() => ModalInstance.CloseAsync()">Close</button>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">
+                    <i class="fas fa-dollar-sign mr-1"></i>
+                    Rent @Book.Title
+                </p>
+                <button @onclick="() => ModalInstance.CloseAsync()" class="delete" aria-label="close"></button>
+            </header>
+            <EditForm EditContext="EditContext" OnValidSubmit="Rent">
+                <DataAnnotationsValidator/>
+                <section class="modal-card-body">
+
+
+                    <div class="field">
+                        <label class="label">Username</label>
+                        <div class="control">
+                            <InputText @bind-Value="@ViewModel.Username" class="input" type="text" placeholder="joe_bloggs_123"/>
+                            <ValidationMessage For="() => ViewModel.Username"></ValidationMessage>
+                        </div>
+                    </div>
+                    <p>Please enter your username and we will try and rent this book for you.</p>
+
+                    @if (IsLoading)
+                    {
+                        <div class="content">
+                            <p>Renting @Book.Title for @ViewModel.Username</p>
+                            <progress class="progress is-small is-primary" max="100">15%</progress>
+                        </div>    
+                    }
+                    
+                    @if (ErrorMessage is not null)
+                    {
+                        <div class="content has-text-danger">
+                            @ErrorMessage
+                        </div>    
+                    }
+
+                </section>
+
+                <footer class="modal-card-foot">
+                    <button type="submit" class="button is-success">Submit</button>
+                    <button @onclick="() => ModalInstance.CloseAsync()" class="button is-danger is-outlined" aria-label="close">Cancel</button>
+                </footer>
+            </EditForm>
+        </div>
+
+
+    </div>
+</div>
 
 @code {
 
+
     [CascadingParameter]
     BlazoredModalInstance ModalInstance { get; set; } = null!;
+
+    [Parameter]
+    public BookDto Book { get; set; } = null!;
+
+    [Inject]
+    public IBRentalsApiClient Client { get; set; } = null!;
+    
+    [Inject]
+    public IToastService ToastService { get; set; } = null!;
+
+    private EditContext EditContext { get; set; } = null!;
+
+    private RentBookViewModel ViewModel { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        EditContext = new EditContext(ViewModel);
+        base.OnInitialized();
+    }
+
+    private bool IsLoading { get; set; }
+    
+    private string? ErrorMessage { get; set; }
+
+    private async Task Rent()
+    {
+        IsLoading = true;
+        ErrorMessage = await Client.RentBook(Book.Id, ViewModel.Username);
+        IsLoading = false;
+        
+        if (ErrorMessage is not null)
+        {
+            await ModalInstance.CloseAsync();
+            ToastService.ShowSuccess($"{Book.Title} rented");
+        }
+    }
 
 }

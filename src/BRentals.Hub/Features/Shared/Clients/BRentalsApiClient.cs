@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text;
 using BRentals.DTOs;
 using BRentals.Hub.Features.Shared.Extensions;
@@ -71,5 +72,37 @@ public class BRentalsApiClient : IBRentalsApiClient
         }
 
         return null;
+    }
+
+    public async ValueTask<string?> RentBook(
+        string isbn, 
+        string username)
+    {
+        var responseMessage = await _client.PostAsJsonAsync("rentals", new RentBookRequest(isbn, username));
+
+        if (responseMessage.IsSuccessStatusCode)
+        {
+            return null;
+        }
+
+        if (responseMessage.StatusCode is HttpStatusCode.BadRequest)
+        {
+            var failureResponse = await responseMessage.Content.ReadFromJsonAsync<FailureResponse>();
+            if (failureResponse is not null && failureResponse.Errors.Any())
+            {
+                return failureResponse.Errors.First().Message;
+            }
+        }
+
+        return $"Something went wrong reserving the book {isbn}";
+    }
+
+    private record RentBookRequest(string Isbn, string Username);
+
+    private record FailureResponse(
+        string ApplicationName, 
+        List<FailureResponse.Error> Errors)
+    {
+        public record Error(string Message, string Code, string? ResourceName);
     }
 }

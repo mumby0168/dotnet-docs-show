@@ -16,4 +16,8 @@ public interface IBRentalsApiClient
     ValueTask<BookDto?> GetBook(
         string isbn,
         string? category);
+
+    ValueTask<string?> RentBook(
+        string isbn,
+        string username);
 }

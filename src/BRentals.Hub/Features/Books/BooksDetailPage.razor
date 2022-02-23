@@ -60,11 +60,14 @@
     private static string AuthorsList(string[] authors) =>
         string.Join(", ", authors);
 
-    private async Task TestBookRental()
+    private Task TestBookRental()
     {
-        var modalRef = ModalService.Show<RentBookModal>();
-        await modalRef.Result;
-        ToastService.ShowSuccess("Modal closed!");
+        if (Book is not null)
+        {
+            ModalService.ShowRentBookModal(Book);
+
+        }
+        return Task.CompletedTask;
     }
 
 }
