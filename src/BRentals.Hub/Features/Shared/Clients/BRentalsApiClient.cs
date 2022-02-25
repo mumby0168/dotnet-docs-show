@@ -97,6 +97,46 @@ public class BRentalsApiClient : IBRentalsApiClient
         return $"Something went wrong reserving the book {isbn}";
     }
 
+    public async ValueTask<PagedApiResult<RentalDto>> GetBookRentals(
+        string isbn, 
+        int pageSize = 20, 
+        string? continuation = null)
+    {
+        _client.TrySetHeader(ContinuationHeader, continuation);
+
+        var response = await _client.GetAsync($"rentals/books?isbn={isbn}&pageSize={pageSize}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            return new PagedApiResult<RentalDto>(
+                true,
+                await response.Content.ReadFromJsonAsync<List<RentalDto>>() ?? new List<RentalDto>(),
+                response.TryGetHeader(ContinuationHeader));
+        }
+
+        return new PagedApiResult<RentalDto>(false, new List<RentalDto>());
+    }
+
+    public async ValueTask<PagedApiResult<RentalDto>> GetCustomerRentals(
+        string username, 
+        int pageSize = 20, 
+        string? continuation = null)
+    {
+        _client.TrySetHeader(ContinuationHeader, continuation);
+
+        var response = await _client.GetAsync($"rentals/books?username={username}&pageSize={pageSize}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            return new PagedApiResult<RentalDto>(
+                true,
+                await response.Content.ReadFromJsonAsync<List<RentalDto>>() ?? new List<RentalDto>(),
+                response.TryGetHeader(ContinuationHeader));
+        }
+
+        return new PagedApiResult<RentalDto>(false, new List<RentalDto>());
+    }
+
     private record RentBookRequest(string Isbn, string Username);
 
     private record FailureResponse(

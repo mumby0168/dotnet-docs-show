@@ -25,11 +25,13 @@ public static class RentalEndpoints
         
         builder.MapGet("/api/rentals/customers", FetchForUsername)
             .WithTags(Tag)
+            .Produces<IEnumerable<RentalDto>>()
             .Produces<ErrorDto>(400)
             .Produces<ErrorDto>(404);
         
         builder.MapGet("/api/rentals/books", FetchForBook)
             .WithTags(Tag)
+            .Produces<IEnumerable<RentalDto>>()
             .Produces<ErrorDto>(400)
             .Produces<ErrorDto>(404);
 

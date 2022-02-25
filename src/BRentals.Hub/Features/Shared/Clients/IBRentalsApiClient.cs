@@ -20,4 +20,14 @@ public interface IBRentalsApiClient
     ValueTask<string?> RentBook(
         string isbn,
         string username);
+
+    ValueTask<PagedApiResult<RentalDto>> GetBookRentals(
+        string isbn,
+        int pageSize = 20,
+        string? continuation = null);
+    
+    ValueTask<PagedApiResult<RentalDto>> GetCustomerRentals(
+        string username,
+        int pageSize = 20,
+        string? continuation = null);
 }

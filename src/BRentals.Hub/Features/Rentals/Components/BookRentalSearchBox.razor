@@ -1,27 +1,46 @@
+@using System.ComponentModel.DataAnnotations
 <div class="content pt-0">
 
-    <EditForm EditContext="EditContext">
+    <EditForm EditContext="EditContext" OnValidSubmit="Search">
         <DataAnnotationsValidator/>
 
         <div class="field mb-0 has-addons">
             <p class="control is-expanded">
-                <input class="input is-medium" type="text" placeholder="ISBN: 123-321-123-5">
+                <InputText id="brentals-isbn" @bind-Value="@ViewModel.Isbn" class="input is-medium" type="text" placeholder="ISBN: 123-321-123-5"/>
+                <ValidationMessage For="() => ViewModel.Isbn"></ValidationMessage>
             </p>
             <p class="control">
-                <a class="is-medium button">
+                <button type="submit" class="is-medium button">
                     Search
-                </a>
+                </button>
             </p>
         </div>
-
-        <label class="checkbox">
-            <input type="checkbox">
-            Include past rentals
-        </label>
     </EditForm>
 
 </div>
 
 @code {
-    private EditContext EditContext { get; set; } = new(new object());
+
+    private class BookRentalSearchViewModel
+    {
+        [RegularExpression("[0-9-]{13}", ErrorMessage = "An ISBN can only contain numbers and dashes (-) and be 13 characters")]
+        public string Isbn { get; set; } = null!;
+    }
+
+    private EditContext EditContext { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<string> OnSearch { get; set; }
+
+    private BookRentalSearchViewModel ViewModel { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        EditContext = new(ViewModel);
+        base.OnInitialized();
+    }
+
+    private async Task Search() => 
+        await OnSearch.InvokeAsync(ViewModel.Isbn);
+
 }

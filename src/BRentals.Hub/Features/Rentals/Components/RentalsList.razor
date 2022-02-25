@@ -1,0 +1,75 @@
+@if (Rentals.Any() && IsBookRentals)
+{
+    <h3 class="subtitle">@Rentals.First().Title - @Rentals.First().Isbn</h3>
+}
+
+
+<table class="table is-fullwidth">
+    <thead>
+    <tr>
+        @if (!IsBookRentals)
+        {
+            <th>Title</th>
+        }
+
+        <th>Username</th>
+        <th>Rented</th>
+        <th>Returned</th>
+        <th>Reference</th>
+    </tr>
+    </thead>
+    @if (Rentals.Any())
+    {
+        <tbody>
+        @foreach (var rental in Rentals)
+        {
+            <tr>
+                @if (!IsBookRentals)
+                {
+                    <th>@rental.Title</th>
+                }
+                <th>@rental.CustomerUsername</th>
+                <th>@rental.RentedUtc.ToString("D")</th>
+                <th>@GetReturnedTimeDisplay(rental.ReturnedUtc)</th>
+                <th>
+                    <div class="tags">
+                        <div class="tag">
+                            @rental.Id
+                        </div>
+                    </div>
+                </th>
+            </tr>
+        }
+        </tbody>
+    }
+</table>
+
+@if (Rentals.Any() is false)
+{
+    <div class="is-flex is-justify-content-center is-align-content-center">
+        <h3 class="title mb-5">Please search to view rentals</h3>
+    </div>
+}
+
+@if (Rentals.Any())
+{
+    <div class="is-flex is-justify-content-center is-align-content-center">
+        <button @onclick="() => OnLoadMore.InvokeAsync()" class="button is-primary is-outlined">Load More ...</button>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public bool IsBookRentals { get; set; }
+
+    [Parameter]
+    public List<RentalDto> Rentals { get; set; } = new();
+
+    [Parameter]
+    public EventCallback OnLoadMore { get; set; }
+
+    private string GetReturnedTimeDisplay(DateTime? returned) =>
+        returned?.ToString("D") ?? "n/a";
+
+}
