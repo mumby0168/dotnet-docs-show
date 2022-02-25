@@ -6,15 +6,88 @@
             Customer Rentals
         </p>
         <p class="subtitle">
-            Search for rentals via ISBN.
+            Search for rentals via customer username.
         </p>
 
-        <CustomerRentalsSearchBox/>
-        
+        <CustomerRentalsSearchBox OnSearch="Search"/>
+
     </div>
 </section>
 
 
+<section style="margin-top: -2rem" class="section pt-0">
+
+    @if (IsLoading)
+    {
+        <div style="margin-top: -3.5rem" class="mb-2">
+            <progress class="progress is-small is-primary" max="100">15%</progress>
+        </div>
+    }
+
+    <RentalsList OnLoadMore="LoadMore" IsBookRentals="false" Rentals="Rentals"></RentalsList>
+</section>
+
+
 @code {
+
+    [Inject]
+    public IBRentalsApiClient Client { get; set; } = null!;
+
+    [Inject]
+    public IToastService ToastService { get; set; } = null!;
+
+    private List<RentalDto> Rentals { get; set; } = new();
+
+    private string? Continuation { get; set; }
+
+    private string? Username { get; set; }
+
+    private int PageSize => 5;
+
+    private bool IsLoading { get; set; }
+
+    private async Task Search(string username)
+    {
+        Username = username;
+
+        IsLoading = true;
+        var result = await Client.GetCustomerRentals(username, PageSize);
+        IsLoading = false;
+
+        if (result.IsSuccessful)
+        {
+            Rentals = result.Results;
+            Continuation = result.Continuation;
+        }
+    }
+
+    private async Task LoadMore()
+    {
+        if (Username is null)
+        {
+            return;
+        }
+
+        if (Continuation is null)
+        {
+            ToastService.ShowInfo("No more results");
+            return;
+        }
+
+        IsLoading = true;
+
+        var result = await Client.GetCustomerRentals(
+            Username,
+            PageSize,
+            Continuation);
+
+        IsLoading = false;
+
+        if (result.IsSuccessful)
+        {
+            Rentals.AddRange(result.Results);
+            Continuation = result.Continuation;
+        }
+    }
 
 }

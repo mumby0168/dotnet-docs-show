@@ -124,7 +124,7 @@ public class BRentalsApiClient : IBRentalsApiClient
     {
         _client.TrySetHeader(ContinuationHeader, continuation);
 
-        var response = await _client.GetAsync($"rentals/books?username={username}&pageSize={pageSize}");
+        var response = await _client.GetAsync($"rentals/customers?username={username}&pageSize={pageSize}");
 
         if (response.IsSuccessStatusCode)
         {
