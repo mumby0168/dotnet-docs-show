@@ -137,7 +137,7 @@ public class BRentalsApiClient : IBRentalsApiClient
         return new PagedApiResult<RentalDto>(false, new List<RentalDto>());
     }
 
-    private record RentBookRequest(string Isbn, string Username);
+    private record RentBookRequest(string Isbn, string CustomerUsername);
 
     private record FailureResponse(
         string ApplicationName, 

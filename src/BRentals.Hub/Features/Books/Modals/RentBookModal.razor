@@ -34,7 +34,8 @@
 
                     @if (ErrorMessage is not null)
                     {
-                        <div class="content has-text-danger">
+                        <div class="notification is-danger mt-1">
+                            <i class="fa fa-exclamation-triangle mr-1"></i>
                             @ErrorMessage
                         </div>
                     }
@@ -83,11 +84,12 @@
 
     private async Task Rent()
     {
+        ErrorMessage = null;
         IsLoading = true;
         ErrorMessage = await Client.RentBook(Book.Id, ViewModel.Username);
         IsLoading = false;
 
-        if (ErrorMessage is not null)
+        if (ErrorMessage is null)
         {
             await ModalInstance.CloseAsync();
             ToastService.ShowSuccess($"{Book.Title} rented");
