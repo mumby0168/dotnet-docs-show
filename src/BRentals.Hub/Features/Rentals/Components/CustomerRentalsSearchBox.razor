@@ -30,6 +30,17 @@
     private EditContext EditContext { get; set; } = null!;
 
     [Parameter]
+    public string Username
+    {
+        get => _username;
+        set
+        {
+            ViewModel.Username = value;
+            _username = value;
+        }
+    }
+
+    [Parameter]
     public EventCallback<string> OnSearch { get; set; }
 
     private CustomerRentalSearchViewModel ViewModel { get; set; } = new();
@@ -43,4 +54,5 @@
     private async Task Search() => 
         await OnSearch.InvokeAsync(ViewModel.Username);
 
+    private string _username = null!;
 }

@@ -28,7 +28,18 @@
                 {
                     <th>@rental.Title</th>
                 }
-                <th>@rental.CustomerUsername</th>
+                @if (IsBookRentals)
+                {
+                    <th>
+                        <a href="@NavigationUtilities.ViewUserRentals(rental.CustomerUsername)" target="_blank">
+                            @rental.CustomerUsername
+                        </a>
+                    </th>   
+                }
+                else
+                {
+                    <th>@rental.CustomerUsername</th>    
+                }
                 <th>@rental.RentedUtc.ToString("D")</th>
                 <th>@GetReturnedTimeDisplay(rental.ReturnedUtc)</th>
                 <th>

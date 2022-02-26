@@ -1,4 +1,4 @@
-@page "/rentals/customers"
+@page "/rentals/customers/{username?}"
 
 <section class="hero">
     <div class="hero-body">
@@ -9,7 +9,7 @@
             Search for rentals via customer username.
         </p>
 
-        <CustomerRentalsSearchBox OnSearch="Search"/>
+        <CustomerRentalsSearchBox Username="@Username" OnSearch="Search"/>
 
     </div>
 </section>
@@ -35,16 +35,27 @@
 
     [Inject]
     public IToastService ToastService { get; set; } = null!;
+    
+    [Parameter]
+    public string? Username { get; set; }
 
     private List<RentalDto> Rentals { get; set; } = new();
 
     private string? Continuation { get; set; }
 
-    private string? Username { get; set; }
-
     private int PageSize => 5;
 
     private bool IsLoading { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Username is not null)
+        {
+            await Search(Username);
+        }
+        
+        await base.OnInitializedAsync();
+    }
 
     private async Task Search(string username)
     {

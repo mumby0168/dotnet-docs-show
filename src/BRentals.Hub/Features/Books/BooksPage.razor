@@ -36,7 +36,7 @@
         {
             <tr>
                 <td>
-                    <NavLink href="@NavigateToBook(book.Id)">
+                    <NavLink href="@NavigationUtilities.ViewBook(Category, @book.Id)">
                         @book.Title
                     </NavLink>
                 </td>
@@ -48,7 +48,7 @@
                 </td>
                 <td>
                     <div class="tags">
-                        <a target="_blank" href="@ViewRentalsUrl(book.Id)" class="tag is-dark">
+                        <a target="_blank" href="@NavigationUtilities.ViewRentals(book.Id)" class="tag is-dark">
                             @book.Id
                         </a>
                         <span class="tag is-link">@book.Category</span>
@@ -96,11 +96,4 @@
 
     private static string AuthorsList(string[] authors) =>
         string.Join(",", authors);
-
-    private string NavigateToBook(string bookId) =>
-        $"categories/{Category}/books/{bookId}";
-
-    private string ViewRentalsUrl(string isbn) =>
-        $"/rentals/books/{isbn}";
-
 }
