@@ -1,15 +1,23 @@
 @page "/categories"
-@using BRentals.Hub.Features.Shared.Clients
-@using BRentals.DTOs
 
 <section class="hero">
-    <div class="hero-body">
+    <div class="hero-body pb-1">
         <p class="title">
             Book Categories
         </p>
         <p class="subtitle">
             View all your favourite book categories
         </p>
+        <div>
+            <button @onclick="LoadAsync" class="button is-primary is-outlined">
+                <i class="fa fa-recycle mr-1"></i>
+                Refresh
+            </button>
+        </div>
+        
+        <div class="mt-2">
+            <LoadingBar IsLoading="IsLoading"></LoadingBar>
+        </div>
     </div>
 </section>
 
@@ -44,20 +52,28 @@
 
     private string? Continuation { get; set; }
 
+    private bool IsLoading { get; set; }
+
     private List<BookCategoryDto> Categories { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadAsync();
+        await base.OnInitializedAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        IsLoading = true;
         var (isSuccessful, bookCategoryDtos, continuation) =
             await Client.GetBookCategoriesAsync();
+        IsLoading = false;
 
         if (isSuccessful)
         {
             Categories = bookCategoryDtos;
             Continuation = continuation;
         }
-
-        await base.OnInitializedAsync();
     }
 
     private string BooksPageUrl(string category) =>

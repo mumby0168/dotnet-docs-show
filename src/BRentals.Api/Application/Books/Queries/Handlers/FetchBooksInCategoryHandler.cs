@@ -29,7 +29,7 @@ public class FetchBooksInCategoryHandler : IQueryHandler<FetchBooksInCategory, F
                 x.Title,
                 x.Category,
                 x.Authors,
-                x.Published.ToShortDateString()));
+                x.Published.ToDateTime(TimeOnly.MaxValue).ToString("d")));
 
         return new FetchBooksInCategory.QueryResult(bookDtos, result.Continuation);
     }

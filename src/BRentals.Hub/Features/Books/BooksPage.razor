@@ -1,13 +1,23 @@
 @page "/categories/{category}/books"
 
 <section class="hero">
-    <div class="hero-body">
+    <div class="hero-body pb-1">
         <p class="title">
             @Category
         </p>
         <p class="subtitle">
             See all the books in the @Category category
         </p>
+        <div>
+            <button @onclick="LoadAsync" class="button is-primary is-outlined">
+                <i class="fa fa-recycle mr-1"></i>
+                Refresh
+            </button>
+        </div>
+
+        <div class="mt-2">
+            <LoadingBar IsLoading="IsLoading"></LoadingBar>
+        </div>
     </div>
 </section>
 
@@ -59,19 +69,27 @@
     private string? Continuation { get; set; }
 
     private List<BookDto> Books { get; set; } = new();
+    
+    private bool IsLoading { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadAsync();
+        await base.OnInitializedAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        IsLoading = true;
         var (isSuccessful, books, continuation) =
             await Client.GetBooksInCategoryAsync(Category);
+        IsLoading = false;
 
         if (isSuccessful)
         {
             Books = books;
             Continuation = continuation;
         }
-
-        await base.OnInitializedAsync();
     }
 
     private static string AuthorsList(string[] authors) =>
