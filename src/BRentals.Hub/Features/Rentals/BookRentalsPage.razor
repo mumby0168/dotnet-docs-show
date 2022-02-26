@@ -1,4 +1,4 @@
-@page "/rentals/books"
+@page "/rentals/books/{isbn?}"
 
 <section class="hero pb-0">
     <div class="hero-body">
@@ -9,7 +9,7 @@
             Search for rentals via ISBN.
         </p>
 
-        <BookRentalSearchBox OnSearch="Search"/>
+        <BookRentalSearchBox Isbn="@Isbn" OnSearch="Search"/>
 
     </div>
 </section>
@@ -40,11 +40,22 @@
 
     private string? Continuation { get; set; }
 
-    private string? Isbn { get; set; }
+    [Parameter]
+    public string? Isbn { get; set; }
 
     private int PageSize => 5;
 
     private bool IsLoading { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Isbn is not null)
+        {
+            await Search(Isbn);
+        }
+        
+        await base.OnInitializedAsync();
+    }
 
     private async Task Search(string isbn)
     {

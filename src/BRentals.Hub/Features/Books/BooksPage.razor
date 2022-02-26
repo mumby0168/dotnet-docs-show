@@ -48,7 +48,9 @@
                 </td>
                 <td>
                     <div class="tags">
-                        <span class="tag is-dark">@book.Id</span>
+                        <a target="_blank" href="@ViewRentalsUrl(book.Id)" class="tag is-dark">
+                            @book.Id
+                        </a>
                         <span class="tag is-link">@book.Category</span>
                     </div>
                 </td>
@@ -69,7 +71,7 @@
     private string? Continuation { get; set; }
 
     private List<BookDto> Books { get; set; } = new();
-    
+
     private bool IsLoading { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -97,5 +99,8 @@
 
     private string NavigateToBook(string bookId) =>
         $"categories/{Category}/books/{bookId}";
+
+    private string ViewRentalsUrl(string isbn) =>
+        $"/rentals/books/{isbn}";
 
 }

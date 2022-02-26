@@ -31,8 +31,19 @@
 
     [Parameter]
     public EventCallback<string> OnSearch { get; set; }
-
+    
     private BookRentalSearchViewModel ViewModel { get; set; } = new();
+
+    [Parameter]
+    public string Isbn
+    {
+        get => _isbn;
+        set
+        {
+            ViewModel.Isbn = value;
+            _isbn = value;
+        }
+    }
 
     protected override void OnInitialized()
     {
@@ -43,4 +54,5 @@
     private async Task Search() => 
         await OnSearch.InvokeAsync(ViewModel.Isbn);
 
+    private string _isbn;
 }
