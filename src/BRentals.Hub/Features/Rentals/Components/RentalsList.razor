@@ -16,6 +16,7 @@
         <th>Rented</th>
         <th>Returned</th>
         <th>Reference</th>
+        <th>Actions</th>
     </tr>
     </thead>
     @if (Rentals.Any())
@@ -34,11 +35,11 @@
                         <a href="@NavigationUtilities.ViewUserRentals(rental.CustomerUsername)" target="_blank">
                             @rental.CustomerUsername
                         </a>
-                    </th>   
+                    </th>
                 }
                 else
                 {
-                    <th>@rental.CustomerUsername</th>    
+                    <th>@rental.CustomerUsername</th>
                 }
                 <th>@rental.RentedUtc.ToString("D")</th>
                 <th>@GetReturnedTimeDisplay(rental.ReturnedUtc)</th>
@@ -48,6 +49,12 @@
                             @rental.Id
                         </div>
                     </div>
+                </th>
+                <th>
+                    <button class="button is-small is-link is-light">
+                        <i class="fas fa-arrow-right mr-1"></i>
+                        Return
+                    </button>
                 </th>
             </tr>
         }
