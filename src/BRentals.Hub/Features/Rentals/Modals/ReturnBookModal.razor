@@ -1,0 +1,143 @@
+<div class="modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+        <div class="modal-card">
+
+            <header class="modal-card-head">
+                <p class="modal-card-title">
+                    <i class="fas fa-arrow-right mr-1"></i>
+                    Return @BookTitle
+                </p>
+                <button @onclick="() => ModalInstance.CloseAsync()" class="delete" aria-label="close"></button>
+            </header>
+
+            <EditForm EditContext="EditContext" OnValidSubmit="Return">
+                <DataAnnotationsValidator/>
+                <section class="modal-card-body">
+
+                    <div class="field">
+                        <label class="label">ISBN</label>
+                        <div class="control">
+                            <InputText @bind-Value="@ViewModel.Isbn" class="input" type="text" placeholder="123-423-234-1"/>
+                            <ValidationMessage For="() => ViewModel.Isbn"></ValidationMessage>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Username</label>
+                        <div class="control">
+                            <InputText @bind-Value="@ViewModel.Username" class="input" type="text" placeholder="joe_bloggs_123"/>
+                            <ValidationMessage For="() => ViewModel.Username"></ValidationMessage>
+                        </div>
+                    </div>
+
+                    <p>Please provide the ISBN of the book and the username of the customer who rented it. We will then process the rental return.</p>
+
+                    @if (IsLoading)
+                    {
+                        <div class="content">
+                            <p>Renting @BookTitle for @ViewModel.Username</p>
+                            <progress class="progress is-small is-primary" max="100">15%</progress>
+                        </div>
+                    }
+
+                    @if (ErrorMessage is not null)
+                    {
+                        <div class="notification is-danger mt-1">
+                            <i class="fa fa-exclamation-triangle mr-1"></i>
+                            @ErrorMessage
+                        </div>
+                    }
+
+                </section>
+
+                <footer class="modal-card-foot">
+                    <button type="submit" class="button is-success">Submit</button>
+                    <button @onclick="() => ModalInstance.CloseAsync()" class="button is-danger is-outlined" aria-label="close">Cancel</button>
+                </footer>
+
+            </EditForm>
+
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    private class ReturnBookModalViewModal
+    {
+        [Required]
+        public string Username { get; set; } = null!;
+
+        [ValidIsbn]
+        public string Isbn { get; set; } = null!;
+    }
+
+    protected override void OnInitialized()
+    {
+        EditContext = new EditContext(ViewModel);
+        base.OnInitialized();
+    }
+
+    [CascadingParameter]
+    BlazoredModalInstance ModalInstance { get; set; } = null!;
+
+    [Parameter]
+    public string Isbn
+    {
+        get => _isbn;
+        set
+        {
+            ViewModel.Isbn = _isbn;
+            _isbn = value;
+        }
+    }
+
+    [Parameter]
+    public string? Username
+    {
+        get => _username;
+        set
+        {
+            if (value is not null)
+            {
+                ViewModel.Username = value;
+            }
+            _username = value;
+        }
+    }
+
+    [Inject]
+    public IBRentalsApiClient Client { get; set; } = null!;
+    
+    [Inject]
+    public IToastService ToastService { get; set; } = null!;
+
+    [Parameter]
+    public string BookTitle { get; set; } = null!;
+
+    private ReturnBookModalViewModal ViewModel { get; set; } = new();
+
+    private EditContext EditContext { get; set; } = null!;
+
+    private bool IsLoading { get; set; }
+
+    private async Task Return()
+    {
+        ErrorMessage = null;
+        IsLoading = true;
+        ErrorMessage = await Client.ReturnBook(ViewModel.Username, ViewModel.Isbn);
+        IsLoading = false;
+
+        if (ErrorMessage is null)
+        {
+            await ModalInstance.CloseAsync();
+            ToastService.ShowSuccess($"{BookTitle} returned for {ViewModel.Username}");
+        }
+    }
+
+    private string? ErrorMessage { get; set; }
+    private string? _username;
+    private string _isbn = null!;
+}

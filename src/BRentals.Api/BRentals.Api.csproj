@@ -13,7 +13,7 @@
     <PackageReference Include="Convey.CQRS.Queries" Version="1.0.531" />
     <PackageReference Include="IEvangelist.Azure.CosmosRepository" Version="2.12.1" />
     <PackageReference Include="IEvangelist.Azure.CosmosRepository.AspNetCore" Version="2.12.1" />
-    <PackageReference Include="Mumby0168.CleanArchitecture.Exceptions.AspNetCore" Version="1.0.1" />
+    <PackageReference Include="Mumby0168.CleanArchitecture.Exceptions.AspNetCore" Version="1.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 

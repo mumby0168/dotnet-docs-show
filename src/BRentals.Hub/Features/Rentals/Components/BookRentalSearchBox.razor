@@ -1,4 +1,3 @@
-@using System.ComponentModel.DataAnnotations
 <div class="content pt-0">
 
     <EditForm EditContext="EditContext" OnValidSubmit="Search">
@@ -23,7 +22,7 @@
 
     private class BookRentalSearchViewModel
     {
-        [RegularExpression("[0-9-]{13}", ErrorMessage = "An ISBN can only contain numbers and dashes (-) and be 13 characters")]
+        [RegularExpression(ValidationUtilities.Isbn.Regex, ErrorMessage = ValidationUtilities.Isbn.Message)]
         public string Isbn { get; set; } = null!;
     }
 

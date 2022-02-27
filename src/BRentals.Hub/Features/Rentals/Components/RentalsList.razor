@@ -1,3 +1,4 @@
+@using BRentals.Hub.Features.Shared.Extensions
 @if (Rentals.Any() && IsBookRentals)
 {
     <h3 class="subtitle">@Rentals.First().Title - @Rentals.First().Isbn</h3>
@@ -40,8 +41,8 @@
                 {
                     <th>@rental.CustomerUsername</th>
                 }
-                <th>@rental.RentedUtc.ToString("D")</th>
-                <th>@GetReturnedTimeDisplay(rental.ReturnedUtc)</th>
+                <th>@GetTimeDisplay(rental.RentedUtc)</th>
+                <th>@GetTimeDisplay(rental.ReturnedUtc)</th>
                 <th>
                     <div class="tags">
                         <div class="tag">
@@ -50,7 +51,7 @@
                     </div>
                 </th>
                 <th>
-                    <button class="button is-small is-link is-light">
+                    <button @onclick="() => Return(rental, rental.CustomerUsername)" class="button is-small is-link is-light">
                         <i class="fas fa-arrow-right mr-1"></i>
                         Return
                     </button>
@@ -86,7 +87,13 @@
     [Parameter]
     public EventCallback OnLoadMore { get; set; }
 
-    private string GetReturnedTimeDisplay(DateTime? returned) =>
-        returned?.ToString("D") ?? "n/a";
+    [CascadingParameter]
+    public IModalService ModalService { get; set; } = null!;
+
+    private string GetTimeDisplay(DateTime? returned) =>
+        returned?.ToString("dd-MMM-yy hh:mm tt") ?? "n/a";
+
+    private void Return(RentalDto rental, string username) =>
+        ModalService.ShowReturnBookModal(rental);
 
 }

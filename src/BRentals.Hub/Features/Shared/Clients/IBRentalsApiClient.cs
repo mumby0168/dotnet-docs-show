@@ -30,4 +30,8 @@ public interface IBRentalsApiClient
         string username,
         int pageSize = 20,
         string? continuation = null);
+
+    ValueTask<string?> ReturnBook(
+        string username,
+        string isbn);
 }

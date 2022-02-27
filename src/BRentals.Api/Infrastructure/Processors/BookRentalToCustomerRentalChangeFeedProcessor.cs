@@ -14,6 +14,7 @@ public class BookRentalToCustomerRentalChangeFeedProcessor : IItemChangeFeedProc
     public async ValueTask HandleAsync(BookRental bookRental, CancellationToken cancellationToken)
     {
         var customerRental = new CustomerRental(
+            bookRental.Id,
             bookRental.Book,
             bookRental.CustomerUsername,
             bookRental.RentedAt,

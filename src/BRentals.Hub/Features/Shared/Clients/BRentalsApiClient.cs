@@ -137,7 +137,36 @@ public class BRentalsApiClient : IBRentalsApiClient
         return new PagedApiResult<RentalDto>(false, new List<RentalDto>());
     }
 
-    private record RentBookRequest(string Isbn, string CustomerUsername);
+    public async ValueTask<string?> ReturnBook(
+        string username, 
+        string isbn)
+    {
+        var responseMessage = await _client.PutAsJsonAsync("rentals/return", new ReturnBookRequest(isbn, username));
+
+        if (responseMessage.IsSuccessStatusCode)
+        {
+            return null;
+        }
+
+        if (responseMessage.StatusCode is HttpStatusCode.BadRequest)
+        {
+            var failureResponse = await responseMessage.Content.ReadFromJsonAsync<FailureResponse>();
+            if (failureResponse is not null && failureResponse.Errors.Any())
+            {
+                return failureResponse.Errors.First().Message;
+            }
+        }
+
+        return $"Something went wrong returning the book {isbn}";
+    }
+
+    private record RentBookRequest(
+        string Isbn, 
+        string CustomerUsername);
+    
+    public record ReturnBookRequest(
+        string Isbn,
+        string CustomerUsername);
 
     private record FailureResponse(
         string ApplicationName, 
