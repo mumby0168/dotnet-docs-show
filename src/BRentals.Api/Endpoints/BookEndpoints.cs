@@ -28,6 +28,12 @@ public static class BookEndpoints
             .Produces(404)
             .Produces<BookDto>();
 
+        builder.MapGet("/api/books/search", SearchBooks)
+            .WithTags(Tag)
+            .Produces<IEnumerable<BookDto>>()
+            .Produces(204)
+            .Produces(404);
+
         return builder;
     }
 
@@ -52,6 +58,15 @@ public static class BookEndpoints
         }
 
         return bookDtos;
+    }
+
+    private static async Task<IResult> SearchBooks(
+        IQueryDispatcher dispatcher,
+        [FromQuery] string term,
+        [FromQuery] string category)
+    {
+        var result = await dispatcher.QueryAsync(new SearchBooks(term, category));
+        return result.Any() ? Results.Ok(result) : Results.NoContent();
     }
 
     private static async Task<IResult> GetBook(

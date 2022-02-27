@@ -34,4 +34,8 @@ public interface IBRentalsApiClient
     ValueTask<string?> ReturnBook(
         string username,
         string isbn);
+    
+    ValueTask<List<BookDto>> SearchBooksInCategory(
+        string term,
+        string category);
 }

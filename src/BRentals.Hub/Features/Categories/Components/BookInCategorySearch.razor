@@ -1,22 +1,26 @@
+@using BRentals.Hub.Features.Shared.Extensions
 <div class="content pt-0">
 
     <EditForm EditContext="EditContext" OnValidSubmit="Search">
-        <DataAnnotationsValidator/>
-
         <div class="field mb-0 has-addons">
             <p class="control mb-0">
                 <span class="select">
-                    <select>
+                    <InputSelect class="has-no-outline" @bind-Value="@ViewModel.Category">
                         @foreach (var category in BookCategoriesState.CategoryNames)
                         {
                             <option>@category</option>
                         }
-                    </select>
+                    </InputSelect>
                 </span>
             </p>
-            <p class="control is-expanded mb-0">
-                <InputText id="brentals-isbn" @bind-Value="@ViewModel.Title" class="input" type="text" placeholder="Micro..."/>
-                <ValidationMessage For="() => ViewModel.Title"></ValidationMessage>
+            <p class="control is-expanded mb-0 has-icons-right">
+                <InputText id="brentals-isbn" @bind-Value="@ViewModel.Title" class="input has-no-outline" type="text" placeholder="Micro..."/>
+                @if (Books.Any())
+                {
+                    <span @onclick="() => Books.Clear()" style="cursor: pointer; pointer-events: all" class="icon is-small is-right">
+                        <i class="fas fa-times"></i>
+                    </span>
+                }
             </p>
             <p class="control mb-0">
                 <button type="submit" class="button">
@@ -26,20 +30,32 @@
         </div>
     </EditForm>
 
-    @if (Show)
+    @if (Books.Any())
     {
         <div class="panel">
-            <a class="panel-block">
-                <span class="panel-icon">
-                    <i class="fas fa-book" aria-hidden="true"></i>
-                </span>
-                bulma
-            </a>
+            @foreach (var book in Books)
+            {
+                <a href="@NavigationUtilities.ViewBook(book.Category, book.Id)" class="panel-block is-flex is-justify-content-space-between">
+                    <div class="is-flex is-justify-content-center is-align-items-center">
+                        <span class="panel-icon">
+                            <i class="fas fa-book" aria-hidden="true"></i>
+                        </span>
+                        @book.Title
+                    </div>
+                    <div>
+                        <button @onclick="() => NavigationManager.NavigateTo(NavigationUtilities.ViewRentals(book.Id))" class="button is-info mx-1">
+                            <i class="fas fa-eye mr-1"></i>
+                            Rentals
+                        </button>
+                        <button @onclick="() => Rent(book)" class="button is-primary mx-1">
+                            <i class="fas fa-dollar-sign mr-1"></i>
+                            Rent
+                        </button>
+                    </div>
+                </a>
+            }
         </div>
     }
-
-
-
 </div>
 
 @code {
@@ -48,27 +64,50 @@
     {
         [Required]
         public string Title { get; set; } = null!;
+
+        [Required]
+        public string Category { get; set; } = null!;
     }
 
     private EditContext EditContext { get; set; } = null!;
 
+    private bool IsLoading { get; set; }
+
     [Parameter]
-    public EventCallback<string> OnSearch { get; set; }
+    public EventCallback<bool> OnSearching { get; set; }
+
+    [CascadingParameter]
+    public IModalService ModalService { get; set; } = null!;
 
     [Inject]
     public BookCategoriesState BookCategoriesState { get; set; } = null!;
+    
+    [Inject]
+    public NavigationManager NavigationManager { get; set; } = null!;
+
+    [Inject]
+    public IBRentalsApiClient Client { get; set; } = null!;
 
     private bool Show { get; set; }
 
     private BooksInCategorySearchViewModel ViewModel { get; set; } = new();
 
+    private List<BookDto> Books { get; set; } = new();
+
     protected override Task OnInitializedAsync()
     {
-        EditContext = new(ViewModel);
+        EditContext = new EditContext(ViewModel);
         return base.OnInitializedAsync();
     }
 
-    private void Search() =>
-        Show = !Show;
+    private void Rent(BookDto book) =>
+        ModalService.ShowRentBookModal(book);
+
+    private async Task Search()
+    {
+        await OnSearching.InvokeAsync(true);
+        Books = await Client.SearchBooksInCategory(ViewModel.Title, ViewModel.Category);
+        await OnSearching.InvokeAsync(false);
+    }
 
 }

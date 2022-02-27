@@ -160,6 +160,25 @@ public class BRentalsApiClient : IBRentalsApiClient
         return $"Something went wrong returning the book {isbn}";
     }
 
+    public async ValueTask<List<BookDto>> SearchBooksInCategory(string term, string category)
+    {
+        var response = await _client.GetAsync($"books/search?term={term}&category={category}");
+        
+        Console.WriteLine(response.StatusCode);
+
+        if (response.StatusCode is HttpStatusCode.NoContent)
+        {
+            return new List<BookDto>();
+        }
+
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadFromJsonAsync<List<BookDto>>() ?? new List<BookDto>();
+        }
+
+        return new List<BookDto>();
+    }
+
     private record RentBookRequest(
         string Isbn, 
         string CustomerUsername);

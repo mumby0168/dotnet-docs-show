@@ -9,7 +9,7 @@
             View all your favourite book categories
         </p>
         
-        <BookInCategorySearch/>
+        <BookInCategorySearch OnSearching="Searching"/>
         
         <div>
             <button @onclick="LoadAsync" class="button is-primary is-outlined">
@@ -67,6 +67,9 @@
         await LoadAsync();
         await base.OnInitializedAsync();
     }
+
+    private void Searching(bool searching) =>
+        IsLoading = searching;
 
     private async Task LoadAsync()
     {
