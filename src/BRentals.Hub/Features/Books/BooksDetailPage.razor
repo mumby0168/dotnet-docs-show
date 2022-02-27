@@ -9,9 +9,9 @@
                 <i class="fas fa-bookmark mr-1"></i>
                 @Book.Title
             </p>
-            
+
             <span class="dropdown-divider"></span>
-            
+
             <p class="subtitle">
                 Written by @AuthorsList(Book.Authors)
             </p>
@@ -22,6 +22,10 @@
             <button @onclick="TestBookRental" class="button is-primary is-outlined">
                 <i class="fas fa-dollar-sign mr-1"></i>
                 Rent
+            </button>
+            <button @onclick="() => NavigationManager.NavigateTo(NavigationUtilities.ViewRentals(Book.Id))" class="button is-info is-outlined">
+                <i class="fas fa-eye mr-1"></i>
+                Rentals
             </button>
         </div>
     </section>
@@ -40,7 +44,10 @@
 
     [CascadingParameter]
     public IModalService ModalService { get; set; } = null!;
-    
+
+    [Inject]
+    public NavigationManager NavigationManager { get; set; } = null!;
+
     [Inject]
     public IToastService ToastService { get; set; } = null!;
 
@@ -60,7 +67,6 @@
         if (Book is not null)
         {
             ModalService.ShowRentBookModal(Book);
-
         }
         return Task.CompletedTask;
     }
