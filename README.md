@@ -1,6 +1,8 @@
 # dotnet-docs-show
 The book rental store demo for my demo on the dotnet docs show.
 
+![NET Docs Show](https://user-images.githubusercontent.com/23740684/155897713-6d101d6c-2ac7-40d8-958a-93568ff23b30.jpg)
+
 # API
 
 The API allows some simple tasks on a book.
@@ -23,7 +25,7 @@ The UI allows the API to be driven in a more interactive manor. The basic functi
 - [x] List all categories
 - [x] List books in a category
 - [x] View a book
-- [ ] Make a rental on a book
-- [ ] Search for rentals for a customer
-- [ ] Return a book for a given rental for a customer
-- [ ] Search for rentals for a book
+- [x] Make a rental on a book
+- [x] Search for rentals for a customer
+- [x] Return a book for a given rental for a customer
+- [x] Search for rentals for a book
