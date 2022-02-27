@@ -1,0 +1,74 @@
+<div class="content pt-0">
+
+    <EditForm EditContext="EditContext" OnValidSubmit="Search">
+        <DataAnnotationsValidator/>
+
+        <div class="field mb-0 has-addons">
+            <p class="control mb-0">
+                <span class="select">
+                    <select>
+                        @foreach (var category in BookCategoriesState.CategoryNames)
+                        {
+                            <option>@category</option>
+                        }
+                    </select>
+                </span>
+            </p>
+            <p class="control is-expanded mb-0">
+                <InputText id="brentals-isbn" @bind-Value="@ViewModel.Title" class="input" type="text" placeholder="Micro..."/>
+                <ValidationMessage For="() => ViewModel.Title"></ValidationMessage>
+            </p>
+            <p class="control mb-0">
+                <button type="submit" class="button">
+                    Search
+                </button>
+            </p>
+        </div>
+    </EditForm>
+
+    @if (Show)
+    {
+        <div class="panel">
+            <a class="panel-block">
+                <span class="panel-icon">
+                    <i class="fas fa-book" aria-hidden="true"></i>
+                </span>
+                bulma
+            </a>
+        </div>
+    }
+
+
+
+</div>
+
+@code {
+
+    private class BooksInCategorySearchViewModel
+    {
+        [Required]
+        public string Title { get; set; } = null!;
+    }
+
+    private EditContext EditContext { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<string> OnSearch { get; set; }
+
+    [Inject]
+    public BookCategoriesState BookCategoriesState { get; set; } = null!;
+
+    private bool Show { get; set; }
+
+    private BooksInCategorySearchViewModel ViewModel { get; set; } = new();
+
+    protected override Task OnInitializedAsync()
+    {
+        EditContext = new(ViewModel);
+        return base.OnInitializedAsync();
+    }
+
+    private void Search() =>
+        Show = !Show;
+
+}

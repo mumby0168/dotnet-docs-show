@@ -8,6 +8,9 @@
         <p class="subtitle">
             View all your favourite book categories
         </p>
+        
+        <BookInCategorySearch/>
+        
         <div>
             <button @onclick="LoadAsync" class="button is-primary is-outlined">
                 <i class="fa fa-recycle mr-1"></i>
@@ -49,6 +52,9 @@
 
     [Inject]
     public IBRentalsApiClient Client { get; set; } = null!;
+    
+    [Inject]
+    public BookCategoriesState BookCategoriesState { get; set; } = null!;
 
     private string? Continuation { get; set; }
 
@@ -71,6 +77,7 @@
 
         if (isSuccessful)
         {
+            BookCategoriesState.Update(bookCategoryDtos);
             Categories = bookCategoryDtos;
             Continuation = continuation;
         }
