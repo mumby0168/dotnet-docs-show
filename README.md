@@ -1,8 +1,6 @@
 # dotnet-docs-show
 The book rental store demo for my demo on the dotnet docs show.
 
-# Architecture
-
 ![NET Docs Show](https://user-images.githubusercontent.com/23740684/155897713-6d101d6c-2ac7-40d8-958a-93568ff23b30.jpg)
 
 # API
