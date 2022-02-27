@@ -1,3 +1,4 @@
+using BRentals.Api;
 using BRentals.Api.Application.Extensions;
 using BRentals.Api.Endpoints;
 using BRentals.Api.Infrastructure.Extensions;
@@ -13,7 +14,7 @@ builder.Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen();
 
-builder.Services.AddCleanArchitectureExceptionsHandler(options => options.ApplicationName = "BRentals.Api");
+builder.Services.AddCleanArchitectureExceptionsHandler(options => options.ApplicationName = ApiConstants.AppName);
 
 var app = builder.Build();
 
