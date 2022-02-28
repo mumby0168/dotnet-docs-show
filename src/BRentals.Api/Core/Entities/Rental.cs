@@ -10,7 +10,7 @@ public class Rental : FullItem
     public DateTime RentedAt { get; }
     public DateTime? ReturnedAt { get; private set; }
 
-    public Rental(
+    protected Rental(
         string partitionKey,
         RentedBook book,
         string customerUsername,
@@ -35,7 +35,7 @@ public class Rental : FullItem
     {
         if (ReturnedAt is not null)
         {
-            throw new DomainException<BookRental>($"The book rental with ID {Id} has already been returned on {ReturnedAt}");
+            throw new DomainException<BookRental>($"The book rental with ID {Id} was already been returned on {ReturnedAt}");
         }
         
         ReturnedAt = DateTime.UtcNow;

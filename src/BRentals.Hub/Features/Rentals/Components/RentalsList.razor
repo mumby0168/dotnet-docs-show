@@ -51,7 +51,7 @@
                     </div>
                 </th>
                 <th>
-                    <button @onclick="() => Return(rental, rental.CustomerUsername)" class="button is-small is-link is-light">
+                    <button disabled="@(rental.ReturnedUtc is not null)" @onclick="() => Return(rental, rental.CustomerUsername)" class="button is-small is-link is-light">
                         <i class="fas fa-arrow-right mr-1"></i>
                         Return
                     </button>

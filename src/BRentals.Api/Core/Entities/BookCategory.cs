@@ -12,8 +12,8 @@ public class BookCategory : FullItem
             throw new DomainException<BookCategory>("A book category name must be provided");
         }
         
-        PartitionKey = nameof(BookCategory);
         Id = id;
+        PartitionKey = nameof(BookCategory);
     }
     
     public string PartitionKey { get; set; }

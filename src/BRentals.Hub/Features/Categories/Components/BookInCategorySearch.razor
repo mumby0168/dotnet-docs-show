@@ -105,6 +105,11 @@
 
     private async Task Search()
     {
+        if (string.IsNullOrWhiteSpace(ViewModel.Category))
+        {
+            ViewModel.Category = BookCategoriesState.CategoryNames.FirstOrDefault() ?? "No Categories";
+        }
+        
         await OnSearching.InvokeAsync(true);
         Books = await Client.SearchBooksInCategory(ViewModel.Title, ViewModel.Category);
         await OnSearching.InvokeAsync(false);
