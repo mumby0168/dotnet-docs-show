@@ -3,6 +3,18 @@ The book rental store demo for my demo on the dotnet docs show.
 
 ![NET Docs Show](https://user-images.githubusercontent.com/23740684/155897713-6d101d6c-2ac7-40d8-958a-93568ff23b30.jpg)
 
+## Run locally
+
+To run the project locally all you need is a cosmos connection string, this can either from the emulator or a real service. The demo uses the serverless cosmos DB plan as in the cases of demo's it works out a lot cheaper.
+
+Simply navigate to `BRentals.Api` project in a terminal of your choice and run the following command.
+
+```shell
+dotnet user-secrets set RepositoryOptions:CosmosConnectionString "<your-conn-string>"
+```
+
+Alternatively, you can add this to the `appsettings.Development.json` file in the `BRentals.Api` project.
+
 # API
 
 The API allows some simple tasks on a book.
